@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Order {
+  id               String           @id
+  firstname        String
+  lastname         String
+  status           OrderStatus
+  vendorId         String
+  transactionState TransactionState @default(pending)
+  transactionId    Int?
+  paidAt           DateTime?
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @default(now()) @updatedAt
+  vendor           Vendor           @relation(fields: [vendorId], references: [id])
+
+  @@map("orders")
+}
+
+model Vendor {
+  id              String         @id
+  name            String
+  pin             String
+  orders          Order[]
+
+  @@map("vendors")
+}
+
+enum OrderStatus {
+  pending
+  preparing
+  ready
+  finished
+  cancelled
+}
+
+enum TransactionState {
+  pending
+  paid
+  canceled
+  refused
+  refunded
+}
