@@ -13,13 +13,6 @@ export interface DecodedToken {
   vendorId: string;
 }
 
-export const enum Permission {
-  stream = 'stream',
-  entry = 'entry',
-  anim = 'anim',
-  admin = 'admin',
-}
-
 /************************/
 /** Databse extensions **/
 /************************/

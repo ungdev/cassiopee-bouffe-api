@@ -8,3 +8,11 @@ export const fetchVendor = async (parameterId: string, key = 'id'): Promise<Vend
 
   return vendor;
 };
+
+export const createVendor = (vendor: Vendor) => {
+  if (!/^\d{6}$/.test(vendor.pin)) {
+    throw new Error('The pin must be composed of 6 digits');
+  }
+
+  return database.vendor.create({ data: vendor });
+};
