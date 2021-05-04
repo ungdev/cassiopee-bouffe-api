@@ -12,7 +12,7 @@ import { PayBody } from '../../src/controllers/vendors/createOrder';
 import env from '../../src/utils/env';
 import { randomInt } from '../../src/utils/helpers';
 
-describe.only('POST /vendors/:vendorId/orders', () => {
+describe('POST /vendors/:vendorId/orders', () => {
   let vendor: Vendor;
 
   const items: Item[] = [];

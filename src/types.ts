@@ -71,7 +71,6 @@ export const enum Error {
   NotFound = 'La ressource est introuvable',
   RouteNotFound = 'La route est introuvable',
   VendorNotFound = 'Le vendeur est introuvable',
-  CartNotFound = 'Le panier est introuvable',
   OrderNotFound = 'La commande est introuvable',
   ItemNotFound = "L'item est introuvable",
 

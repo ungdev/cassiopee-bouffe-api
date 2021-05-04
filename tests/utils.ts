@@ -1,8 +1,10 @@
-import { Vendor } from '.prisma/client';
+import { Provider, Vendor } from '.prisma/client';
 import { Item } from '@prisma/client';
 import faker from 'faker';
 import { createItem, setItemAvailibility } from '../src/operations/item';
+import { createOrder } from '../src/operations/order';
 import { createVendor } from '../src/operations/vendor';
+import { PrimitiveOrderItem } from '../src/types';
 import nanoid from '../src/utils/nanoid';
 
 export const generateFakePin = (length = 6) => {
@@ -44,3 +46,17 @@ export const createFakeItem = async ({
 
   return item;
 };
+
+export const createFakeOrder = ({
+  firstname = faker.name.firstName(),
+  lastname = faker.name.lastName(),
+  provider = 'etupay',
+  vendor,
+  orderItems,
+}: {
+  firstname?: string;
+  lastname?: string;
+  provider?: Provider;
+  vendor: Vendor;
+  orderItems: PrimitiveOrderItem[];
+}) => createOrder({ firstname, lastname, provider, vendor, orderItems });

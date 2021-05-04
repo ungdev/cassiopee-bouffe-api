@@ -14,7 +14,7 @@ model Order {
   provider         Provider
   status           OrderStatus      @default(paying)
   vendorId         String
-  transactionState TransactionState @default(paying)
+  transactionState TransactionState @default(pending)
   transactionId    Int?
   createdAt        DateTime         @default(now())
   updatedAt        DateTime         @default(now()) @updatedAt
@@ -70,7 +70,6 @@ enum OrderStatus {
 }
 
 enum TransactionState {
-  paying
   pending
   paid
   canceled
