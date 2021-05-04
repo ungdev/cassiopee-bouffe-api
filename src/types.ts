@@ -63,6 +63,8 @@ export const enum Error {
   // The server understood the request but refuses to authorize it*
   AlreadyAuthenticated = 'Vous êtes déjà identifié',
   ItemNotAvailable = "L'item n'est pas disponible",
+  AlreadyPaid = 'La commande a déjà été payée',
+  AlreadyErrored = 'Vous ne pouvez pas valider une transaction échouée',
 
   // 404
   // The server can't find the requested resource
