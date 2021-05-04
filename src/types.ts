@@ -62,6 +62,7 @@ export const enum Error {
   // 403
   // The server understood the request but refuses to authorize it*
   AlreadyAuthenticated = 'Vous êtes déjà identifié',
+  ItemNotAvailable = "L'item n'est pas disponible",
 
   // 404
   // The server can't find the requested resource
@@ -70,6 +71,7 @@ export const enum Error {
   VendorNotFound = 'Le vendeur est introuvable',
   CartNotFound = 'Le panier est introuvable',
   OrderNotFound = 'La commande est introuvable',
+  ItemNotFound = "L'item est introuvable",
 
   // 415
   UnsupportedMediaType = "Le format de la requête n'est pas supporté",

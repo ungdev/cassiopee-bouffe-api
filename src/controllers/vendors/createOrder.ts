@@ -3,9 +3,9 @@ import Joi from 'joi';
 import { Basket } from '../../services/etupay';
 import { validateBody } from '../../middlewares/validation';
 import { encodeToBase64, removeAccents } from '../../utils/helpers';
-import { badRequest, created } from '../../utils/responses';
+import { created, notFound, forbidden, badRequest } from '../../utils/responses';
 import * as validators from '../../utils/validators';
-import { fetchVendors } from '../../operations/vendor';
+import { fetchVendor } from '../../operations/vendor';
 import { Error, PrimitiveOrderItem } from '../../types';
 import { createOrder } from '../../operations/order';
 import { Provider } from '.prisma/client';
@@ -15,7 +15,6 @@ export interface PayBody {
   firstname: string;
   lastname: string;
   provider: Provider;
-  vendorId: string;
   items: { id: string; quantity: number }[];
 }
 
@@ -27,7 +26,6 @@ export default [
       firstname: validators.name.required(),
       lastname: validators.name.required(),
       provider: validators.provider.required(),
-      vendorId: validators.name.required(),
       items: Joi.array()
         .items(
           Joi.object({
@@ -35,46 +33,49 @@ export default [
             quantity: Joi.number().min(1).required(),
           }),
         )
+        .unique((a, b) => a.id === b.id)
         .required(),
     }),
   ),
 
   // Controller
-  async (request: Request<{}, {}, PayBody>, response: Response, next: NextFunction) => {
+  async (request: Request<{ vendorId: string }, {}, PayBody>, response: Response, next: NextFunction) => {
     try {
-      const { body } = request;
-
-      // Retreives the items
-      const vendors = await fetchVendors();
+      const { body, params } = request;
 
       // Retreive the find vendor
-      const vendor = vendors.find((findVendor) => findVendor.id === body.vendorId);
+      const vendor = await fetchVendor(params.vendorId);
 
       // Checks if the vendor provided in the body exists
       if (!vendor) {
-        return badRequest(response, Error.InvalidBody);
+        return notFound(response, Error.VendorNotFound);
       }
 
       // If some of the item does not belong to the vendor
       if (body.items.some((bodyItem) => !vendor.items.some((vendorItem) => bodyItem.id === vendorItem.id))) {
-        return badRequest(response, Error.InvalidBody);
+        return notFound(response, Error.ItemNotFound);
       }
 
       // Form the order items object
-      let orderItems: PrimitiveOrderItem[];
+      const orderItems: PrimitiveOrderItem[] = [];
 
-      try {
-        orderItems = body.items.map((bodyItem) => {
-          const item = vendor.items.find((findItem) => findItem.id === bodyItem.id);
+      // Check items loop and add the order items
+      for (const bodyItem of body.items) {
+        const item = vendor.items.find((findItem) => findItem.id === bodyItem.id);
 
-          if (!item) {
-            throw new global.Error('Item not found');
-          }
+        if (!item) {
+          return notFound(response, Error.ItemNotFound);
+        }
 
-          return { id: nanoid(), itemId: bodyItem.id, quantity: bodyItem.quantity };
-        });
-      } catch {
-        return badRequest(response, Error.InvalidBody);
+        if (!item.available) {
+          return forbidden(response, Error.ItemNotAvailable);
+        }
+
+        orderItems.push({ id: nanoid(), itemId: bodyItem.id, quantity: bodyItem.quantity });
+      }
+
+      if (orderItems.length === 0) {
+        return badRequest(response, Error.EmptyBasket);
       }
 
       const order = await createOrder({

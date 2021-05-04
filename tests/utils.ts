@@ -1,4 +1,7 @@
+import { Vendor } from '.prisma/client';
+import { Item } from '@prisma/client';
 import faker from 'faker';
+import { createItem, setItemAvailibility } from '../src/operations/item';
 import { createVendor } from '../src/operations/vendor';
 import nanoid from '../src/utils/nanoid';
 
@@ -10,7 +13,7 @@ export const generateFakePin = (length = 6) => {
   return digits.reduce((previous, current) => previous + current.toString(), '');
 };
 
-export const createFakeVendor = ({ name = faker.company.companyName(), pin }: { name?: string; pin?: string }) => {
+export const createFakeVendor = ({ name = faker.company.companyName(), pin }: { name?: string; pin?: string } = {}) => {
   const id = nanoid();
 
   return createVendor({
@@ -18,4 +21,26 @@ export const createFakeVendor = ({ name = faker.company.companyName(), pin }: { 
     name,
     pin: pin || generateFakePin(),
   });
+};
+
+export const createFakeItem = async ({
+  name = faker.commerce.productName(),
+  price = faker.datatype.number({ min: 100, max: 1000 }),
+  available = true,
+  vendor,
+}: {
+  name?: string;
+  price?: number;
+  available?: boolean;
+  vendor: Vendor;
+}): Promise<Item> => {
+  const item = await createItem(name, price, vendor);
+
+  // Update the item avai
+  if (!available) {
+    await setItemAvailibility(item.id, false);
+    item.available = false;
+  }
+
+  return item;
 };

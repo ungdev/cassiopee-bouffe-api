@@ -1,15 +1,16 @@
 import { Vendor } from '@prisma/client';
 import database from '../services/database';
 
-export const fetchVendor = async (parameterId: string, key = 'id'): Promise<Vendor> => {
+export const fetchVendor = async (parameterId: string, key = 'id') => {
   const vendor = await database.vendor.findUnique({
     where: { [key]: parameterId },
+    include: { items: true },
   });
 
   return vendor;
 };
 
-export const fetchVendors = () => database.vendor.findMany({ include: { items: true } });
+export const fetchVendors = () => database.vendor.findMany();
 
 export const createVendor = (vendor: Vendor) => {
   if (!/^\d{6}$/.test(vendor.pin)) {
