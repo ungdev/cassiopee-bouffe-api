@@ -18,6 +18,7 @@
     "@types/jsonwebtoken": "^8.5.1",
     "@types/lodash": "^4.14.168",
     "@types/morgan": "^1.9.2",
+    "@types/split": "^1.0.0",
     "@ung/node-etupay": "^3.0.0",
     "axios": "^0.21.1",
     "cors": "^2.8.5",
@@ -31,6 +32,7 @@
     "morgan": "^1.10.0",
     "nanoid": "^3.1.22",
     "prisma": "^2.21.2",
+    "split": "^1.0.1",
     "typescript": "^4.2.4",
     "winston": "^3.3.3"
   },
