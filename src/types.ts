@@ -17,6 +17,12 @@ export interface DecodedToken {
 /** Databse extensions **/
 /************************/
 
+export interface PrimitiveOrderItem {
+  id: string;
+  itemId: string;
+  quantity: number;
+}
+
 /************/
 /** Etupay **/
 /************/

@@ -11,28 +11,58 @@ model Order {
   id               String           @id
   firstname        String
   lastname         String
-  status           OrderStatus
+  provider         Provider
+  status           OrderStatus      @default(paying)
   vendorId         String
-  transactionState TransactionState @default(pending)
+  transactionState TransactionState @default(paying)
   transactionId    Int?
   paidAt           DateTime?
   createdAt        DateTime         @default(now())
   updatedAt        DateTime         @default(now()) @updatedAt
+
   vendor           Vendor           @relation(fields: [vendorId], references: [id])
+  orderItems       OrderItem[]
 
   @@map("orders")
+}
+
+model Item {
+  id              String           @id
+  name            String
+  price           Int
+  available       Boolean          @default(true)
+  vendorId        String
+
+  vendor          Vendor           @relation(fields: [vendorId], references: [id])
+  orderItems      OrderItem[]
+
+
+  @@map("items")
+}
+
+model OrderItem {
+  id            String           @id
+  orderId       String
+  itemId        String
+  quantity      Int
+
+  order         Order            @relation(fields: [orderId], references: [id])
+  item          Item             @relation(fields: [itemId], references: [id])
 }
 
 model Vendor {
   id              String         @id
   name            String         @unique
   pin             String         @unique
+
   orders          Order[]
+  items           Item[]
 
   @@map("vendors")
 }
 
 enum OrderStatus {
+  paying
   pending
   preparing
   ready
@@ -41,9 +71,15 @@ enum OrderStatus {
 }
 
 enum TransactionState {
+  paying
   pending
   paid
   canceled
   refused
   refunded
+}
+
+enum Provider {
+  etupay
+  lyfpay
 }
