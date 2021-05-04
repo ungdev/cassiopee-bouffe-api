@@ -39,8 +39,11 @@
   "devDependencies": {
     "@commitlint/cli": "^12.1.1",
     "@commitlint/config-conventional": "^12.1.1",
+    "@types/chai": "^4.2.17",
     "@types/faker": "^5.5.3",
     "@types/mocha": "^8.2.2",
+    "@types/sinon": "^10.0.0",
+    "@types/supertest": "^2.0.11",
     "@typescript-eslint/eslint-plugin": "^4.22.0",
     "@typescript-eslint/parser": "^4.22.0",
     "chai": "^4.3.4",
@@ -66,6 +69,8 @@
     "build": "tsc",
     "start": "node build/src/server.js",
     "lint": "eslint src/ tests/ --ext .ts",
-    "lint:fix": "eslint --fix src/ tests/ --ext .ts"
+    "lint:fix": "eslint --fix src/ tests/ --ext .ts",
+    "test": "mocha",
+    "test:coverage": "nyc yarn test"
   }
 }

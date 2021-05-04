@@ -8,6 +8,6 @@ export const id = Joi.string()
   .regex(/^[\dA-Z]{6}$/)
   .required();
 
-// User
+// Vendor
 export const name = Joi.string().regex(nameRegex);
 export const pin = Joi.string().regex(pinRegex);

@@ -32,12 +32,6 @@ Create the tables
 DATABASE_URL="mysql://user:password@localhost/bouffe" yarn prisma db push --preview-feature
 ```
 
-Populate the tables
-
-```
-mysql -u DATABASE_USER -p bouffe < seed.sql
-```
-
 Generate the prisma client (redo this command when you update schema.prisma)
 
 ```

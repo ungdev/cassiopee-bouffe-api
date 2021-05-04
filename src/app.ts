@@ -26,7 +26,7 @@ app.use(cors(), helmet());
 // Use json middleware to check and parse json body
 app.use(json);
 
-// Fetch user from database
+// Fetch vendor from database
 app.use(initVendorRequest);
 // Main routes
 app.use(env.api.prefix, router);

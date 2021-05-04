@@ -32,14 +32,12 @@ export const notInProduction = <T = string>(key: T) => {
 const env = {
   development: process.env.NODE_ENV === 'development',
   production: process.env.NODE_ENV === 'production',
+  test: process.env.NODE_ENV === 'test',
   // Defines the environment used by sentry
   environment: (loadEnv('ENVIRONMENT') || notInProduction('development')) as 'development' | 'staging' | 'production',
   api: {
     port: loadIntEnv('API_PORT') || 3000,
     prefix: loadEnv('API_PREFIX') || '/',
-  },
-  front: {
-    website: loadEnv('API_WEBSITE') || 'https://arena.utt.fr',
   },
   nanoid: {
     length: loadIntEnv('NANOID_LENGTH') || 6,
@@ -57,15 +55,15 @@ const env = {
     port: loadIntEnv('DATABASE_PORT', true) || 3306,
     username: loadEnv('DATABASE_USERNAME', true),
     password: loadEnv('DATABASE_PASSWORD', true),
-    name: loadEnv('DATABASE_NAME', true) || 'arena',
+    name: loadEnv('DATABASE_NAME', true) || 'bouffe',
   },
   etupay: {
     id: loadIntEnv('ETUPAY_ID') || notInProduction(1),
     // random 256 bits key genereated if not in production
     key: loadEnv('ETUPAY_KEY') || notInProduction(crypto.randomBytes(32).toString('base64')),
     url: loadEnv('ETUPAY_KEY') || 'https://etupay.utt.fr/initiate',
-    successUrl: loadEnv('ETUPAY_SUCCESS_URL') || 'https://arena.utt.fr/dashboard/payment?type=success',
-    errorUrl: loadEnv('ETUPAY_ERROR_URL') || 'https://arena.utt.fr/dashboard/payment?type=error',
+    successUrl: loadEnv('ETUPAY_SUCCESS_URL'),
+    errorUrl: loadEnv('ETUPAY_ERROR_URL'),
   },
   log: {
     level: loadEnv('LOG_LEVEL') || 'silly',
