@@ -1,5 +1,5 @@
-import { Order } from '.prisma/client';
 import { pick } from 'lodash';
+import { Order } from '.prisma/client';
 import { Vendor } from '../types';
 
 export const filterVendor = (vendor: Vendor) => pick(vendor, ['id', 'name', 'items']);

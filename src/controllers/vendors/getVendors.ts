@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { fetchVendors } from '../../operations/vendor';
 import { success } from '../../utils/responses';
-import { filterVendor, filterVendorRestricted } from '../../utils/filters';
+import { filterVendorRestricted } from '../../utils/filters';
 
 export default [
   // Controller
