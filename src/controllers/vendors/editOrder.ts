@@ -7,6 +7,7 @@ import { editOrder, fetchOrder } from '../../operations/order';
 import { OrderStatus } from '.prisma/client';
 import { getRequestInfo } from '../../utils/vendor';
 import { filterOrder } from '../../utils/filters';
+import { isAuthenticated } from '../../middlewares/authentication';
 
 export interface Body {
   status: OrderStatus;
@@ -32,6 +33,7 @@ const allowedDirections = [
 
 export default [
   // Middlewares
+  isAuthenticated,
 
   validateBody(
     Joi.object({
