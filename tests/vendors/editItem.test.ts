@@ -10,7 +10,7 @@ import database from '../../src/services/database';
 import { fetchVendor } from '../../src/operations/vendor';
 import { generateToken } from '../../src/utils/vendor';
 
-describe.only('PATCH /vendors/me/items/:itemId', () => {
+describe('PATCH /vendors/me/items/:itemId', () => {
   let vendor: Vendor;
   let token: string;
   let item: Item;
@@ -43,6 +43,14 @@ describe.only('PATCH /vendors/me/items/:itemId', () => {
       .set('Authorization', `Bearer ${token}`)
       .send({ status: 'lol' })
       .expect(400, { error: Error.InvalidBody });
+  });
+
+  it('should fail because the item is invalid', async () => {
+    await request(app)
+      .patch(`/vendors/me/items/lol`)
+      .send(validBody)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(404, { error: Error.ItemNotFound });
   });
 
   it('should fail with an internal server error', async () => {

@@ -45,6 +45,18 @@ describe('Test middlewares', () => {
         .expect(401, { error: Error.InvalidToken });
     });
 
+    // This case should never happen. (Auth as a deleted vendor)
+    it('should tell the vendor does not exists', async () => {
+      const token = jwt.sign({ vendorId: 'A1B2C3' }, env.jwt.secret, {
+        expiresIn: env.jwt.expires,
+      });
+
+      await request(app)
+        .get('/')
+        .set('Authorization', `Bearer ${token}`)
+        .expect(401, { error: Error.Unauthenticated });
+    });
+
     it("should reject a wrong token because it's expired", async () => {
       const token = jwt.sign({ vendorId: 'A1B2C3' }, env.jwt.secret, {
         expiresIn: '1ms',

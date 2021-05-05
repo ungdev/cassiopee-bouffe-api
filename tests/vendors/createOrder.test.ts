@@ -74,6 +74,16 @@ describe('POST /vendors/:vendorId/orders', () => {
       .expect(400, { error: Error.EmptyBasket });
   });
 
+  it('should fail because one of the item is invalid', async () => {
+    await request(app)
+      .post(`/vendors/${vendor.id}/orders`)
+      .send({
+        ...validBody,
+        items: [...validBody.items, { id: 'lol', quantity: 1 }],
+      })
+      .expect(404, { error: Error.ItemNotFound });
+  });
+
   it('should fail because the items are not unique', async () => {
     await request(app)
       .post(`/vendors/${vendor.id}/orders`)

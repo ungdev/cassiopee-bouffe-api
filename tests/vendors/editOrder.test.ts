@@ -55,6 +55,14 @@ describe('PATCH /vendors/me/orders/:orderId', () => {
       .expect(400, { error: Error.InvalidBody });
   });
 
+  it('should fail because the order id is invalid', async () => {
+    await request(app)
+      .patch(`/vendors/me/orders/lol`)
+      .send(validBody)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(404, { error: Error.OrderNotFound });
+  });
+
   for (const invalidStatus of [OrderStatus.ready, OrderStatus.finished]) {
     it(`should fail because the status is not allowed [${invalidStatus}]`, async () => {
       await request(app)

@@ -20,20 +20,3 @@ export const validateBody = (schema: ObjectSchema) => (
 
   return next();
 };
-
-export const validateQuery = (schema: ObjectSchema) => (
-  request: Request,
-  response: Response,
-  next: NextFunction,
-): void => {
-  const { error, value } = schema.validate(request.query);
-
-  if (error) {
-    logger.debug(error.message);
-    return badRequest(response, Error.InvalidQueryParameters);
-  }
-
-  request.query = value;
-
-  return next();
-};

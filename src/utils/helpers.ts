@@ -12,10 +12,5 @@ export const decodeFromBase64 = (string: string) => {
 export const removeAccents = (string: string): string =>
   string.normalize('NFD').replace(/[\u0300-\u036F]/g, '');
 
-export const formatPrice = (cents: number) => {
-  const euros = cents / 100;
-  return euros.toLocaleString('fr-fr', { style: 'currency', currency: 'EUR' });
-};
-
 export const randomInt = (min: number, max: number) =>
   Math.floor(Math.random() * (max - min) + min);

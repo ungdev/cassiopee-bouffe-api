@@ -1,4 +1,4 @@
-import { Item, Prisma, Vendor } from '@prisma/client';
+import { Prisma, Vendor } from '@prisma/client';
 import database from '../services/database';
 import nanoid from '../utils/nanoid';
 
@@ -8,13 +8,6 @@ export const fetchItem = async (parameterId: string, key = 'id') => {
   });
 
   return item;
-};
-
-export const fetchItems = async (): Promise<Item[]> => {
-  // fetches the items
-  const items = await database.item.findMany();
-
-  return items;
 };
 
 export const createItem = (name: string, price: number, vendor: Vendor) =>

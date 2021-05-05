@@ -55,15 +55,6 @@ export default [
         return notFound(response, Error.VendorNotFound);
       }
 
-      // If some of the item does not belong to the vendor
-      if (
-        body.items.some(
-          (bodyItem) => !vendor.items.some((vendorItem) => bodyItem.id === vendorItem.id),
-        )
-      ) {
-        return notFound(response, Error.ItemNotFound);
-      }
-
       // Form the order items object
       const orderItems: PrimitiveOrderItem[] = [];
 
@@ -71,7 +62,8 @@ export default [
       for (const bodyItem of body.items) {
         const item = vendor.items.find((findItem) => findItem.id === bodyItem.id);
 
-        if (!item) {
+        // Check if the item exists and belongs to the vendor
+        if (!item || item.vendorId !== vendor.id) {
           return notFound(response, Error.ItemNotFound);
         }
 
