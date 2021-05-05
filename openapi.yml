@@ -123,6 +123,21 @@ paths:
                   http:
                     type: boolean
 
+  /vendors:
+    get:
+      summary: Récupère la liste des vendeurs et de ceux qu'ils vendent
+      tags:
+        - Vendors
+      responses:
+        200:
+          description: La liste des vendeurs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Vendor'
+
   /vendors/login:
     post:
       summary: Se connecter en tant que vendeur
@@ -279,6 +294,39 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Order'
+
+  /vendors/me/items/{itemId}:
+    patch:
+      summary: Modifie la disponibilité d'un item
+      description: "Change la disponibilité d'un item pour l'afficher dans les stores ou non"
+      parameters:
+        - in: path
+          name: itemId
+          description: Identifiant de l'item à modifier
+          schema:
+            type: string
+          required: true
+      tags:
+        - Vendors
+      security:
+        - BearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                available:
+                  type: boolean
+                  example: true
+
+      responses:
+        200:
+          description: L'item modifiée est renvoyée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
 
   /callbacks/etupay:
     get:
