@@ -1,0 +1,320 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Gala Bouffe
+  description: Api du Gala
+
+servers:
+  - url: http://127.0.0.1:3000
+    description: Serveur local
+
+tags:
+  - name: General
+    description: Routes générales
+  - name: Callbacks
+    description: Routes de callbacks
+  - name: Vendors
+    description: Routes manipulant les resources de ventes
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    OrderStatus:
+      type: string
+      example: paying
+      enum: [paying, pending, preparing, ready, finished, cancelled]
+
+    Vendor:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item'
+
+    Order:
+      type: object
+      properties:
+        id:
+          example: A1S2D3
+          type: string
+        firstname:
+          type: string
+          example: Alban
+        lastname:
+          type: string
+          example: Lachô
+        provider:
+          type: string
+          example: etupay
+          enum: [etupay, lyfpay]
+        status:
+          $ref: '#/components/schemas/OrderStatus'
+        orderItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItem'
+
+    RestrictedOrder:
+      type: object
+      properties:
+        id:
+          example: A1S2D3
+          type: string
+        firstname:
+          type: string
+          example: Alban
+        status:
+          $ref: '#/components/schemas/OrderStatus'
+
+    Item:
+      type: object
+      properties:
+        id:
+          example: A1S2D3
+          type: string
+        name:
+          example: Giga Quick
+          type: string
+        price:
+          example: 1000
+          type: integer
+        available:
+          example: true
+          type: boolean
+
+    OrderItem:
+      type: object
+      properties:
+        id:
+          example: A1S2D3
+          type: string
+        quantity:
+          example: 1
+          type: string
+        item:
+          $ref: '#/components/schemas/Item'
+
+paths:
+  /:
+    get:
+      summary: Renvoie l'état du serveur
+      description: Indique si le serveur fonctionne correctement.
+      tags:
+        - General
+      responses:
+        200:
+          description: Indique si le serveur fonctionne correctement
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  http:
+                    type: boolean
+
+  /vendors/login:
+    post:
+      summary: Se connecter en tant que vendeur
+      description: Permet de se connecter en tant que vendeur
+      tags:
+        - Vendors
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                pin:
+                  type: string
+      responses:
+        200:
+          description: La connexion est un succès
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  vendor:
+                    $ref: '#/components/schemas/Vendor'
+                  token:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ
+
+  /vendors/{vendorId}/orders:
+    get:
+      summary: Affiche les commandes en cours
+      description: Affiche les commandes en cours d'un vendeur de façon restreinte
+      tags:
+        - Vendors
+      parameters:
+        - in: path
+          name: vendorId
+          description: Identifiant du vendeur
+          schema:
+            type: string
+          required: true
+      responses:
+        200:
+          description: Renvoie la liste des commandes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RestrictedOrder'
+    post:
+      summary: Créer une commande
+      description: Créer une commande en tant que client
+      tags:
+        - Vendors
+      parameters:
+        - in: path
+          name: vendorId
+          description: Identifiant du vendeur
+          schema:
+            type: string
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstname:
+                  type: string
+                lastname:
+                  type: string
+                provider:
+                  type: string
+                  enum: [etupay, lyfpay]
+                items:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      quantity:
+                        type: number
+      responses:
+        201:
+          description: Le panier a bien été créé. L'URL permettant de procéder au paiement est renvoyée.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  url:
+                    type: string
+                    description: URL vers le provider
+                  price:
+                    type: integer
+                    description: Prix du panier en centimes
+
+  /vendors/me/orders:
+    get:
+      summary: Affiche les commandes en cours
+      description: Affiche les commandes en cours du vendeur actuel
+      tags:
+        - Vendors
+      security:
+        - BearerAuth: []
+      responses:
+        200:
+          description: Renvoie la liste des commandes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+
+  /vendors/me/orders/{orderId}:
+    patch:
+      summary: Modifie une commande
+      description: |-
+        Modifie le statut d'une commande
+        Le status ne peut être modifié que de
+          - pending ↔ preparing
+          - preparing ↔ ready
+          - ready ↔ finished
+          - [pending, preparing, ready] → cancelled
+      parameters:
+        - in: path
+          name: orderId
+          description: Identifiant de la commande à modifier
+          schema:
+            type: string
+          required: true
+      tags:
+        - Vendors
+      security:
+        - BearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  $ref: '#/components/schemas/OrderStatus'
+
+      responses:
+        200:
+          description: La commande modifiée est renvoyée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+
+  /callbacks/etupay:
+    get:
+      summary: Gère le callback client d'etupay
+      description: Décode le payload et vérifie l'intégrité et la validité des informations
+      parameters:
+        - in: query
+          name: payload
+          description: Contenu du callback d'etupay
+          schema:
+            type: string
+          required: true
+      tags:
+        - Callbacks
+      responses:
+        302:
+          description: Le client est renvoyé sur le frontend
+          headers:
+            Location:
+              schema:
+                type: string
+                example: https://gala.utt.fr/successUrl
+
+    post:
+      summary: Gère le callback de la banque d'etupay
+      description: Renvoie toujours une réponse positive
+      tags:
+        - Callbacks
+      responses:
+        200:
+          description: Réponse positive de l'API
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  api:
+                    type: string
+                    example: ok
