@@ -11,7 +11,7 @@ import { fetchVendor } from '../../src/operations/vendor';
 import { OrderStatus } from '.prisma/client';
 import { generateToken } from '../../src/utils/vendor';
 
-describe('PATCH /vendors/:vendorId/orders', () => {
+describe('PATCH /vendors/me/orders/:orderId', () => {
   let vendor: Vendor;
   let token: string;
   let order: Order;
@@ -75,7 +75,7 @@ describe('PATCH /vendors/:vendorId/orders', () => {
       .expect(500, { error: Error.InternalServerError });
   });
 
-  it('should return 200 with an array of vendors', async () => {
+  it('should return 200 with the updated order', async () => {
     const response = await request(app)
       .patch(`/vendors/me/orders/${order.id}`)
       .send(validBody)

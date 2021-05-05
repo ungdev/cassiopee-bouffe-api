@@ -1,5 +1,8 @@
 import { pick } from 'lodash';
+import { Item } from '.prisma/client';
 import { Vendor, Order } from '../types';
+
+export const filterItem = (item: Item) => pick(item, ['id', 'name', 'price', 'available']);
 
 export const filterVendor = (vendor: Vendor) => pick(vendor, ['id', 'name', 'items']);
 
@@ -21,7 +24,7 @@ export const filterOrder = (order: Order) => {
 
   const restrictedOrderItems = order.orderItems.map((orderItem) => {
     const restrictedOrderItem = pick(orderItem, 'id', 'quantity');
-    const restrictedItem = pick(orderItem.item, ['id', 'name', 'price', 'available']);
+    const restrictedItem = filterItem(orderItem.item);
 
     return {
       ...restrictedOrderItem,
