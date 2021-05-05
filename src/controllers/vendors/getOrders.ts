@@ -1,24 +1,19 @@
 import { NextFunction, Request, Response } from 'express';
-import { fetchVendors } from '../../operations/vendor';
-import { notFound, success } from '../../utils/responses';
+import { success } from '../../utils/responses';
 import { filterOrder } from '../../utils/filters';
 import { fetchOrders } from '../../operations/order';
-import { Error } from '../../types';
+import { getRequestInfo } from '../../utils/vendor';
+import { isAuthenticated } from '../../middlewares/authentication';
 
 export default [
+  // Middlewares
+  isAuthenticated,
   // Controller
   async (request: Request, response: Response, next: NextFunction) => {
     try {
-      const { vendorId } = request.params;
+      const { vendor } = getRequestInfo(response);
 
-      const vendors = await fetchVendors();
-
-      // If the vendor id doesn't exists
-      if (!vendors.some((vendor) => vendor.id === vendorId)) {
-        return notFound(response, Error.VendorNotFound);
-      }
-
-      const orders = await fetchOrders(vendorId);
+      const orders = await fetchOrders(vendor.id);
 
       return success(response, orders.map(filterOrder));
     } catch (error) {
