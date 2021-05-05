@@ -1,5 +1,8 @@
 # Cassiopée Bouffe API
 
+[![Build Status](https://github.com/ungdev/cassiopee-bouffe-api/actions/workflows/ci.yml/badge.svg)](https://github.com/ungdev/cassiopee-bouffe-api/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/ungdev/cassiopee-bouffe-api/branch/master/graph/badge.svg)](https://codecov.io/gh/ungdev/cassiopee-bouffe-api)
+
 API web à destination des services de la bouffe de cassiopée
 
 ## Requirements
