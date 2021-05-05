@@ -21,6 +21,12 @@ export type Vendor = prisma.Vendor & {
   items: prisma.Item[];
 };
 
+export type Order = prisma.Order & {
+  orderItems: (prisma.OrderItem & {
+    item: prisma.Item;
+  })[];
+};
+
 export interface PrimitiveOrderItem {
   id: string;
   itemId: string;

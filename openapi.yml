@@ -58,10 +58,6 @@ components:
         lastname:
           type: string
           example: Lachô
-        provider:
-          type: string
-          example: etupay
-          enum: [etupay, lyfpay]
         status:
           $ref: '#/components/schemas/OrderStatus'
         orderItems:

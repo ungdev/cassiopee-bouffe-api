@@ -17,6 +17,13 @@ export const fetchOrders = (vendorId: string) =>
     where: {
       vendorId,
     },
+    include: {
+      orderItems: {
+        include: {
+          item: true,
+        },
+      },
+    },
   });
 
 export const createOrder = (order: {
