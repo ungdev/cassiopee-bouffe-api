@@ -1,6 +1,6 @@
-import { Provider, Vendor } from '.prisma/client';
 import { Item } from '@prisma/client';
 import faker from 'faker';
+import { Provider, Vendor } from '.prisma/client';
 import { createItem, setItemAvailibility } from '../src/operations/item';
 import { createOrder } from '../src/operations/order';
 import { createVendor } from '../src/operations/vendor';

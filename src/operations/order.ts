@@ -4,7 +4,6 @@ import { PrimitiveOrderItem } from '../types';
 import nanoid from '../utils/nanoid';
 
 export const fetchOrder = async (parameterId: string, key = 'id') => {
-  console.log(parameterId);
   const order = await database.order.findUnique({
     where: { [key]: parameterId },
     include: { orderItems: { include: { item: true } } },

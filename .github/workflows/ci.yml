@@ -34,14 +34,14 @@ jobs:
   test:
     runs-on: ubuntu-latest
     env:
-      DATABASE_URL: mysql://test:test@localhost:3306/arena
+      DATABASE_URL: mysql://test:test@localhost:3306/bouffe
     services:
       mariadb:
         image: mariadb:10
         env:
           MYSQL_USER: test
           MYSQL_PASSWORD: test
-          MYSQL_DATABASE: arena
+          MYSQL_DATABASE: bouffe
           MYSQL_RANDOM_ROOT_PASSWORD: yes
 
         ports:
@@ -57,7 +57,6 @@ jobs:
       - run: yarn --frozen-lockfile
       - run: yarn prisma generate
       - run: yarn prisma db push --preview-feature
-      - run: docker exec -i mariadb mysql -utest -ptest arena < seed.sql
       - run: yarn test:coverage
       - uses: codecov/codecov-action@v1
 
