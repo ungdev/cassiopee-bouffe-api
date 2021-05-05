@@ -2,10 +2,11 @@ import { NextFunction, Request, Response } from 'express';
 import * as Sentry from '@sentry/node';
 import jwt, { TokenExpiredError } from 'jsonwebtoken';
 import { Error, DecodedToken } from '../types';
-import { notFound, unauthenticated } from '../utils/responses';
+import { unauthenticated } from '../utils/responses';
 import { fetchVendor } from '../operations/vendor';
 import env from '../utils/env';
 import logger from '../utils/logger';
+import { setRequestInfo } from '../utils/vendor';
 
 // Fetch vendor from database if possible
 export const initVendorRequest = async (
@@ -38,7 +39,7 @@ export const initVendorRequest = async (
     Sentry.setUser({ id: vendor.id, username: vendor.name });
 
     // Store it in `response.locals.vendor` so that we can use it later
-    response.locals.vendor = vendor;
+    setRequestInfo(response, vendor);
   } catch (error) {
     logger.error(error);
 

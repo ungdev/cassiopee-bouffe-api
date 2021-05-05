@@ -11,7 +11,7 @@ import { fetchVendor } from '../../src/operations/vendor';
 import { OrderStatus } from '.prisma/client';
 import { generateToken } from '../../src/utils/vendor';
 
-describe.only('GET /vendors/:vendorId/orders', () => {
+describe('GET /vendors/:vendorId/orders', () => {
   let vendor: Vendor;
   let token: string;
 

@@ -75,6 +75,7 @@ export const enum Error {
   ItemNotAvailable = "L'item n'est pas disponible",
   AlreadyPaid = 'La commande a déjà été payée',
   AlreadyErrored = 'Vous ne pouvez pas valider une transaction échouée',
+  InvalidOrderStatus = 'Vous ne pouvez pas modifier la commande avec un tel status',
 
   // 404
   // The server can't find the requested resource

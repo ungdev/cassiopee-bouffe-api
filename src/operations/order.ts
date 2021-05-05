@@ -1,4 +1,4 @@
-import { OrderStatus, Provider, TransactionState, Vendor } from '@prisma/client';
+import { OrderStatus, Provider, TransactionState, Vendor, Prisma } from '@prisma/client';
 import database from '../services/database';
 import { PrimitiveOrderItem } from '../types';
 import nanoid from '../utils/nanoid';
@@ -48,6 +48,13 @@ export const createOrder = (order: {
           item: true,
         },
       },
+    },
+  });
+export const editOrder = (orderId: string, order: Prisma.OrderUpdateInput) =>
+  database.order.update({
+    data: order,
+    where: {
+      id: orderId,
     },
   });
 

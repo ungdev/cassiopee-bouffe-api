@@ -265,7 +265,7 @@ paths:
         Le status ne peut être modifié que de
           - pending ↔ preparing
           - preparing ↔ ready
-          - ready ↔ finished
+          - ready → finished
           - [pending, preparing, ready] → cancelled
       parameters:
         - in: path
