@@ -4,6 +4,7 @@ import { notFound, success } from '../../utils/responses';
 import { filterOrderRestricted } from '../../utils/filters';
 import { fetchOrders } from '../../operations/order';
 import { Error } from '../../types';
+import { OrderStatus } from '.prisma/client';
 
 export default [
   // Controller
@@ -20,7 +21,12 @@ export default [
 
       const orders = await fetchOrders(vendorId);
 
-      return success(response, orders.map(filterOrderRestricted));
+      const filteredOrders = orders.filter((order) => {
+        const validStatus: OrderStatus[] = [OrderStatus.pending, OrderStatus.preparing, OrderStatus.ready];
+        return validStatus.includes(order.status);
+      });
+
+      return success(response, filteredOrders.map(filterOrderRestricted));
     } catch (error) {
       return next(error);
     }

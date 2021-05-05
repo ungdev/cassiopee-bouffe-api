@@ -7,7 +7,7 @@ import { Error } from '../../src/types';
 import { createFakeItem, createFakeVendor } from '../utils';
 import database from '../../src/services/database';
 
-describe.only('GET /vendors', () => {
+describe('GET /vendors', () => {
   before(async () => {
     const vendor = await createFakeVendor({ name: 'lol' });
     await createFakeItem({ vendor });
