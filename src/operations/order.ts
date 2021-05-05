@@ -12,6 +12,13 @@ export const fetchOrder = async (parameterId: string, key = 'id') => {
   return order;
 };
 
+export const fetchOrders = (vendorId: string) =>
+  database.order.findMany({
+    where: {
+      vendorId,
+    },
+  });
+
 export const createOrder = (order: {
   firstname: string;
   lastname: string;

@@ -10,7 +10,7 @@ export const fetchVendor = async (parameterId: string, key = 'id') => {
   return vendor;
 };
 
-export const fetchVendors = () => database.vendor.findMany();
+export const fetchVendors = () => database.vendor.findMany({ include: { items: true } });
 
 export const createVendor = (vendor: Vendor) => {
   if (!/^\d{6}$/.test(vendor.pin)) {

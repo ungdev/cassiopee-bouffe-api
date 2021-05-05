@@ -7,6 +7,10 @@ info:
 servers:
   - url: http://127.0.0.1:3000
     description: Serveur local
+  - url: https://gala.dev.uttnetgroup.fr/bouffe/api
+    description: Serveur de développement
+  - url: https://gala.utt.fr/bouffe/api
+    description: Serveur de production
 
 tags:
   - name: General

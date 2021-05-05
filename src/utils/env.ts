@@ -34,7 +34,7 @@ const env = {
   production: process.env.NODE_ENV === 'production',
   test: process.env.NODE_ENV === 'test',
   // Defines the environment used by sentry
-  environment: (loadEnv('ENVIRONMENT') || notInProduction('development')) as 'development' | 'staging' | 'production',
+  environment: (loadEnv('ENVIRONMENT') || notInProduction('development')) as 'development' | 'production',
   api: {
     port: loadIntEnv('API_PORT') || 3000,
     prefix: loadEnv('API_PREFIX') || '/',

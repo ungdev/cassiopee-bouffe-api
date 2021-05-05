@@ -1,4 +1,4 @@
-import { TransactionState } from '@prisma/client';
+import prisma, { TransactionState } from '@prisma/client';
 import { ErrorRequestHandler } from 'express';
 /**
  * DISCLAMER: en environnement de développement, la modification de ce fichier ne sera peut-être pas prise en compte par le serveur de dev
@@ -16,6 +16,10 @@ export interface DecodedToken {
 /************************/
 /** Databse extensions **/
 /************************/
+
+export type Vendor = prisma.Vendor & {
+  items: prisma.Item[];
+};
 
 export interface PrimitiveOrderItem {
   id: string;
