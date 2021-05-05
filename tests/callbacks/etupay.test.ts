@@ -48,7 +48,7 @@ describe('POST /callbacks/etupay', () => {
   it('should return a valid answer', () => request(app).post('/callbacks/etupay').expect(200, { api: 'ok' }));
 });
 
-describe.only('GET /callbacks/etupay', () => {
+describe('GET /callbacks/etupay', () => {
   let order: Order;
   let paidPayload: string;
   let refusedPayload: string;
