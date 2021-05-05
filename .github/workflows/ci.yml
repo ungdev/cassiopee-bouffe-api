@@ -35,6 +35,10 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DATABASE_URL: mysql://test:test@localhost:3306/bouffe
+
+      # Used for tests
+      DATABASE_USERNAME: test
+      DATABASE_PASSWORD: test
     services:
       mariadb:
         image: mariadb:10
