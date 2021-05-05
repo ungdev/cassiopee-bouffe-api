@@ -8,7 +8,11 @@ import env from '../utils/env';
 import logger from '../utils/logger';
 
 // Fetch vendor from database if possible
-export const initVendorRequest = async (request: Request, response: Response, next: NextFunction) => {
+export const initVendorRequest = async (
+  request: Request,
+  response: Response,
+  next: NextFunction,
+) => {
   // Get authorization header
   const authorizationHeader = request.get('Authorization');
   if (!authorizationHeader) {

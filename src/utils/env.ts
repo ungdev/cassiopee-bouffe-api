@@ -18,7 +18,8 @@ const loadEnv = (key: string, allowedInTesting = false) => {
   return process.env[key];
 };
 
-const loadIntEnv = (key: string, allowedInTesting = false) => Number(loadEnv(key, allowedInTesting));
+const loadIntEnv = (key: string, allowedInTesting = false) =>
+  Number(loadEnv(key, allowedInTesting));
 
 // Returns the key only if we are not in production
 // Used when you want to have a default option for only testing and dev environment
@@ -34,7 +35,9 @@ const env = {
   production: process.env.NODE_ENV === 'production',
   test: process.env.NODE_ENV === 'test',
   // Defines the environment used by sentry
-  environment: (loadEnv('ENVIRONMENT') || notInProduction('development')) as 'development' | 'production',
+  environment: (loadEnv('ENVIRONMENT') || notInProduction('development')) as
+    | 'development'
+    | 'production',
   api: {
     port: loadIntEnv('API_PORT') || 3000,
     prefix: loadEnv('API_PREFIX') || '/',

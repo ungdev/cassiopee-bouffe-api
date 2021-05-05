@@ -1,5 +1,8 @@
 import { Router } from 'express';
-import { clientCallback as etupayClientCallback, bankCallback as etupayBankCallback } from './etupay';
+import {
+  clientCallback as etupayClientCallback,
+  bankCallback as etupayBankCallback,
+} from './etupay';
 
 const router = Router();
 

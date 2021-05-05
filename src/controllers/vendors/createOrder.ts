@@ -39,7 +39,11 @@ export default [
   ),
 
   // Controller
-  async (request: Request<{ vendorId: string }, {}, PayBody>, response: Response, next: NextFunction) => {
+  async (
+    request: Request<{ vendorId: string }, {}, PayBody>,
+    response: Response,
+    next: NextFunction,
+  ) => {
     try {
       const { body, params } = request;
 
@@ -52,7 +56,11 @@ export default [
       }
 
       // If some of the item does not belong to the vendor
-      if (body.items.some((bodyItem) => !vendor.items.some((vendorItem) => bodyItem.id === vendorItem.id))) {
+      if (
+        body.items.some(
+          (bodyItem) => !vendor.items.some((vendorItem) => bodyItem.id === vendorItem.id),
+        )
+      ) {
         return notFound(response, Error.ItemNotFound);
       }
 
@@ -100,7 +108,11 @@ export default [
       // Foreach cartitem
       for (const orderItem of order.orderItems) {
         // Add the item to the etupay basket
-        basket.addItem(removeAccents(orderItem.item.name), orderItem.item.price, orderItem.quantity);
+        basket.addItem(
+          removeAccents(orderItem.item.name),
+          orderItem.item.price,
+          orderItem.quantity,
+        );
       }
 
       // Returns a answer with the etupay url

@@ -15,7 +15,10 @@ export const generateFakePin = (length = 6) => {
   return digits.reduce((previous, current) => previous + current.toString(), '');
 };
 
-export const createFakeVendor = ({ name = faker.company.companyName(), pin }: { name?: string; pin?: string } = {}) => {
+export const createFakeVendor = ({
+  name = faker.company.companyName(),
+  pin,
+}: { name?: string; pin?: string } = {}) => {
   const id = nanoid();
 
   return createVendor({

@@ -22,7 +22,11 @@ export default [
       const orders = await fetchOrders(vendorId);
 
       const filteredOrders = orders.filter((order) => {
-        const validStatus: OrderStatus[] = [OrderStatus.pending, OrderStatus.preparing, OrderStatus.ready];
+        const validStatus: OrderStatus[] = [
+          OrderStatus.pending,
+          OrderStatus.preparing,
+          OrderStatus.ready,
+        ];
         return validStatus.includes(order.status);
       });
 

@@ -13,7 +13,11 @@ export default [
     const contentType = request.get('Content-Type');
 
     // Continues if the method can't contain a body, or that the content type is not precised or that is precised to be json
-    if (!bodyMethods.includes(request.method) || !contentType || contentType === 'application/json') {
+    if (
+      !bodyMethods.includes(request.method) ||
+      !contentType ||
+      contentType === 'application/json'
+    ) {
       return next();
     }
 

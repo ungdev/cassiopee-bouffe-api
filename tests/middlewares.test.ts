@@ -39,7 +39,10 @@ describe('Test middlewares', () => {
         expiresIn: env.jwt.expires,
       });
 
-      await request(app).get('/').set('Authorization', `Bearer ${token}`).expect(401, { error: Error.InvalidToken });
+      await request(app)
+        .get('/')
+        .set('Authorization', `Bearer ${token}`)
+        .expect(401, { error: Error.InvalidToken });
     });
 
     it("should reject a wrong token because it's expired", async () => {

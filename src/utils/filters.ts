@@ -6,7 +6,9 @@ export const filterVendor = (vendor: Vendor) => pick(vendor, ['id', 'name', 'ite
 export const filterVendorRestricted = (vendor: Vendor) => {
   const restrictedVendor = pick(vendor, ['id', 'name']);
 
-  const restrictedItems = vendor.items.map((item) => pick(item, ['id', 'name', 'price', 'available']));
+  const restrictedItems = vendor.items.map((item) =>
+    pick(item, ['id', 'name', 'price', 'available']),
+  );
 
   return {
     ...restrictedVendor,

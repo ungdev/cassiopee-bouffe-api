@@ -28,7 +28,10 @@ const createEtupayPayload = (etupayBody: object) => {
   const cipher = crypto.createCipheriv('aes-256-cbc', key, initialVector);
 
   // Encrypts the etupay body
-  const encryptedEtupayBody = Buffer.concat([cipher.update(serializedEtupayBody, 'utf-8'), cipher.final()]);
+  const encryptedEtupayBody = Buffer.concat([
+    cipher.update(serializedEtupayBody, 'utf-8'),
+    cipher.final(),
+  ]);
 
   // Create an HMAC based on the initial vector and the encrypted value
   const mac = crypto
@@ -45,7 +48,8 @@ const createEtupayPayload = (etupayBody: object) => {
 };
 
 describe('POST /callbacks/etupay', () => {
-  it('should return a valid answer', () => request(app).post('/callbacks/etupay').expect(200, { api: 'ok' }));
+  it('should return a valid answer', () =>
+    request(app).post('/callbacks/etupay').expect(200, { api: 'ok' }));
 });
 
 describe('GET /callbacks/etupay', () => {
@@ -56,7 +60,10 @@ describe('GET /callbacks/etupay', () => {
   before(async () => {
     const vendor = await createFakeVendor();
     const item = await createFakeItem({ vendor });
-    order = await createFakeOrder({ vendor, orderItems: [{ id: nanoid(), itemId: item.id, quantity: 1 }] });
+    order = await createFakeOrder({
+      vendor,
+      orderItems: [{ id: nanoid(), itemId: item.id, quantity: 1 }],
+    });
 
     // This is the data format how it is encrypted in the payload
     const etupayBody = {
@@ -74,7 +81,10 @@ describe('GET /callbacks/etupay', () => {
     paidPayload = createEtupayPayload(etupayBody);
 
     // Create a refused payload
-    const failedOrder = await createFakeOrder({ vendor, orderItems: [{ id: nanoid(), itemId: item.id, quantity: 1 }] });
+    const failedOrder = await createFakeOrder({
+      vendor,
+      orderItems: [{ id: nanoid(), itemId: item.id, quantity: 1 }],
+    });
     etupayBody.step = 'REFUSED';
     etupayBody.service_data = encodeToBase64({ orderId: failedOrder.id });
     refusedPayload = createEtupayPayload(etupayBody);
@@ -91,7 +101,9 @@ describe('GET /callbacks/etupay', () => {
     request(app).get('/callbacks/etupay').expect(400, { error: Error.InvalidQueryParameters }));
 
   it('should fail because the payload is invalid', () =>
-    request(app).get('/callbacks/etupay?payload=invalidPayload').expect(400, { error: Error.InvalidQueryParameters }));
+    request(app)
+      .get('/callbacks/etupay?payload=invalidPayload')
+      .expect(400, { error: Error.InvalidQueryParameters }));
 
   it("should fail because the order wasn't found", async () => {
     // Update the order id to make it not found
@@ -102,7 +114,9 @@ describe('GET /callbacks/etupay', () => {
       where: { id: order.id },
     });
 
-    await request(app).get(`/callbacks/etupay?payload=${paidPayload}`).expect(404, { error: Error.OrderNotFound });
+    await request(app)
+      .get(`/callbacks/etupay?payload=${paidPayload}`)
+      .expect(404, { error: Error.OrderNotFound });
 
     // Reupdate the order to make it having the previous id
     await database.order.update({
@@ -125,11 +139,18 @@ describe('GET /callbacks/etupay', () => {
       .expect('Location', env.etupay.errorUrl));
 
   it('should reject as the payment is already errored', () =>
-    request(app).get(`/callbacks/etupay?payload=${refusedPayload}`).expect(403, { error: Error.AlreadyErrored }));
+    request(app)
+      .get(`/callbacks/etupay?payload=${refusedPayload}`)
+      .expect(403, { error: Error.AlreadyErrored }));
 
   it('should successfully redirect to the success url', () =>
-    request(app).get(`/callbacks/etupay?payload=${paidPayload}`).expect(302).expect('Location', env.etupay.successUrl));
+    request(app)
+      .get(`/callbacks/etupay?payload=${paidPayload}`)
+      .expect(302)
+      .expect('Location', env.etupay.successUrl));
 
   it('should fail as the order is already paid', () =>
-    request(app).get(`/callbacks/etupay?payload=${paidPayload}`).expect(403, { error: Error.AlreadyPaid }));
+    request(app)
+      .get(`/callbacks/etupay?payload=${paidPayload}`)
+      .expect(403, { error: Error.AlreadyPaid }));
 });

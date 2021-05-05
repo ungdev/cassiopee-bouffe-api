@@ -61,11 +61,16 @@ export const morgan = () => {
   });
   morganMiddleware.token('ip', getIp);
 
-  const productionFormat = ':ip :username :method :url :status :res[content-length] - :response-time ms';
-  const developmentFormat = ':method :url :status :response-time ms - :res[content-length] - :username';
+  const productionFormat =
+    ':ip :username :method :url :status :res[content-length] - :response-time ms';
+  const developmentFormat =
+    ':method :url :status :response-time ms - :res[content-length] - :username';
 
   // We use process.env.NODE_ENV because this file is imported by env.js
-  return morganMiddleware(process.env.NODE_ENV === 'production' ? productionFormat : developmentFormat, {
-    stream: logStream,
-  });
+  return morganMiddleware(
+    process.env.NODE_ENV === 'production' ? productionFormat : developmentFormat,
+    {
+      stream: logStream,
+    },
+  );
 };

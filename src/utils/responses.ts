@@ -2,7 +2,8 @@ import { Response } from 'express';
 import { Error } from '../types';
 import logger from './logger';
 
-export const success = (response: Response, body: unknown): void => response.status(200).json(body).end();
+export const success = (response: Response, body: unknown): void =>
+  response.status(200).json(body).end();
 
 export const created = (response: Response, body?: unknown): void => {
   if (body) {
@@ -23,20 +24,25 @@ const respondError = (response: Response, error: Error, code: number) => {
   return response.status(code).json({ error }).end();
 };
 
-export const badRequest = (response: Response, error: Error): void => respondError(response, error, 400);
+export const badRequest = (response: Response, error: Error): void =>
+  respondError(response, error, 400);
 
 export const unauthenticated = (response: Response, error?: Error): void =>
   respondError(response, error || Error.Unauthenticated, 401);
 
-export const forbidden = (response: Response, error: Error): void => respondError(response, error, 403);
+export const forbidden = (response: Response, error: Error): void =>
+  respondError(response, error, 403);
 
-export const notFound = (response: Response, error: Error): void => respondError(response, error, 404);
+export const notFound = (response: Response, error: Error): void =>
+  respondError(response, error, 404);
 
-export const conflict = (response: Response, error: Error): void => respondError(response, error, 409);
+export const conflict = (response: Response, error: Error): void =>
+  respondError(response, error, 409);
 
 export const gone = (response: Response, error: Error): void => respondError(response, error, 410);
 
-export const unsupportedMediaType = (response: Response, error: Error): void => respondError(response, error, 415);
+export const unsupportedMediaType = (response: Response, error: Error): void =>
+  respondError(response, error, 415);
 
 export const internalServerError = (response: Response, error?: Error): void =>
   respondError(response, error || Error.InternalServerError, 500);

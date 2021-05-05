@@ -45,7 +45,9 @@ describe('POST /vendors/:vendorId/orders', () => {
   });
 
   it('should fail because the body is missing', async () => {
-    await request(app).post(`/vendors/${vendor.id}/orders`).expect(400, { error: Error.InvalidBody });
+    await request(app)
+      .post(`/vendors/${vendor.id}/orders`)
+      .expect(400, { error: Error.InvalidBody });
   });
 
   describe('test fail quantity (negative, null and float)', () => {
@@ -83,7 +85,10 @@ describe('POST /vendors/:vendorId/orders', () => {
   });
 
   it('should fail as the vendor does not exists', async () => {
-    await request(app).post(`/vendors/lolilol/orders`).send(validBody).expect(404, { error: Error.VendorNotFound });
+    await request(app)
+      .post(`/vendors/lolilol/orders`)
+      .send(validBody)
+      .expect(404, { error: Error.VendorNotFound });
   });
 
   it('should fail as the supplement does not exists', async () => {
@@ -118,9 +123,14 @@ describe('POST /vendors/:vendorId/orders', () => {
   });
 
   it('should successfuly create an order', async () => {
-    const { body } = await request(app).post(`/vendors/${vendor.id}/orders`).send(validBody).expect(201);
+    const { body } = await request(app)
+      .post(`/vendors/${vendor.id}/orders`)
+      .send(validBody)
+      .expect(201);
 
-    const orders = await database.order.findMany({ include: { orderItems: { include: { item: true } } } });
+    const orders = await database.order.findMany({
+      include: { orderItems: { include: { item: true } } },
+    });
     const [order] = orders;
 
     expect(body.url).to.startWith(env.etupay.url);

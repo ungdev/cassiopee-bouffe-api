@@ -65,4 +65,5 @@ export const clientCallback = [
 ];
 
 // Called by the bank few minutes after
-export const bankCallback = (request: Request, response: Response) => success(response, { api: 'ok' });
+export const bankCallback = (request: Request, response: Response) =>
+  success(response, { api: 'ok' });

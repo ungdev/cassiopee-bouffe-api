@@ -35,7 +35,9 @@ describe('GET /vendors/:vendorId/orders', () => {
   it('should fail with an internal server error', async () => {
     sandbox.stub(orderOperations, 'fetchOrders').throws('Unexpected error');
 
-    await request(app).get(`/vendors/${vendor.id}/orders`).expect(500, { error: Error.InternalServerError });
+    await request(app)
+      .get(`/vendors/${vendor.id}/orders`)
+      .expect(500, { error: Error.InternalServerError });
   });
 
   it('should return 200 without any items as the order is paying', async () => {
