@@ -11,7 +11,7 @@ import { fetchVendor } from '../../src/operations/vendor';
 import { OrderStatus } from '.prisma/client';
 import { generateToken } from '../../src/utils/vendor';
 
-describe('GET /vendors/:vendorId/orders', () => {
+describe.only('GET /vendors/:vendorId/orders', () => {
   let vendor: Vendor;
   let token: string;
 
@@ -32,7 +32,7 @@ describe('GET /vendors/:vendorId/orders', () => {
   });
 
   it('should fail as the user is not authenticated', async () => {
-    await request(app).get(`/vendors/lol/orders`).expect(401, { error: Error.Unauthenticated });
+    await request(app).get(`/vendors/me/orders`).expect(401, { error: Error.Unauthenticated });
   });
 
   it('should fail with an internal server error', async () => {
@@ -57,7 +57,20 @@ describe('GET /vendors/:vendorId/orders', () => {
     const testingResult = {
       id: order.id,
       firstname: order.firstname,
+      lastname: order.lastname,
       status: 'pending',
+      orderItems: [
+        {
+          id: order.orderItems[0].id,
+          quantity: order.orderItems[0].quantity,
+          item: {
+            id: order.orderItems[0].item.id,
+            name: order.orderItems[0].item.name,
+            price: order.orderItems[0].item.price,
+            available: order.orderItems[0].item.available,
+          },
+        },
+      ],
     };
 
     expect(testingResult).to.deep.include(response.body[0]);

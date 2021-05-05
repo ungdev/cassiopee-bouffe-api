@@ -31,7 +31,7 @@ export const initVendorRequest = async (
     const vendor = await fetchVendor(decodedToken.vendorId);
 
     if (!vendor) {
-      return notFound(response, Error.VendorNotFound);
+      return unauthenticated(response);
     }
 
     // Set the sentry vendor to identify the problem in case of 500
