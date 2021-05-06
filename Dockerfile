@@ -16,4 +16,5 @@ COPY ./ ./
 RUN yarn prisma generate
 RUN yarn build
 
+# TODO: add yarn prisma create columns in CMD
 CMD yarn start

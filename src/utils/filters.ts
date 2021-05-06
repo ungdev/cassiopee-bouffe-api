@@ -20,7 +20,7 @@ export const filterVendorRestricted = (vendor: Vendor) => {
 };
 
 export const filterOrder = (order: Order) => {
-  const restrictedOrder = pick(order, ['id', 'firstname', 'lastname', 'status']);
+  const restrictedOrder = pick(order, ['id', 'displayId', 'firstname', 'lastname', 'status']);
 
   const restrictedOrderItems = order.orderItems.map((orderItem) => {
     const restrictedOrderItem = pick(orderItem, 'id', 'quantity');
@@ -38,4 +38,5 @@ export const filterOrder = (order: Order) => {
   };
 };
 
-export const filterOrderRestricted = (order: Order) => pick(order, ['id', 'firstname', 'status']);
+export const filterOrderRestricted = (order: Order) =>
+  pick(order, ['id', 'displayId', 'firstname', 'status']);

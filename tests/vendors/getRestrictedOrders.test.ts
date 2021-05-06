@@ -55,6 +55,7 @@ describe('GET /vendors/:vendorId/orders', () => {
 
     const testingResult = {
       id: order.id,
+      displayId: order.displayId,
       firstname: order.firstname,
       status: 'pending',
     };

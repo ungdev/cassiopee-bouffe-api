@@ -92,6 +92,7 @@ describe('PATCH /vendors/me/orders/:orderId', () => {
 
     const testingResult = {
       id: order.id,
+      displayId: order.displayId,
       firstname: order.firstname,
       lastname: order.lastname,
       status: 'preparing',

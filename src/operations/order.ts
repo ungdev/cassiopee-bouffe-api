@@ -26,16 +26,24 @@ export const fetchOrders = (vendorId: string) =>
     },
   });
 
+// Create a display id that increments until 100 before reseting
+// 2 reasons why we do this instead of fetching the last record of the DB and increment it
+// 1 - The API calls can be concurrent so two orders could have the same id at the same time
+// 2 - Fetching to the DB costs a call
+let displayId = 0;
+
 export const createOrder = (order: {
   firstname: string;
   lastname: string;
   provider: Provider;
   vendor: Vendor;
   orderItems: PrimitiveOrderItem[];
-}) =>
-  database.order.create({
+}) => {
+  displayId = (displayId + 1) % 100;
+  return database.order.create({
     data: {
       id: nanoid(),
+      displayId,
       firstname: order.firstname,
       lastname: order.lastname,
       provider: order.provider,
@@ -50,6 +58,8 @@ export const createOrder = (order: {
       },
     },
   });
+};
+
 export const editOrder = (orderId: string, order: Prisma.OrderUpdateInput) =>
   database.order.update({
     data: order,

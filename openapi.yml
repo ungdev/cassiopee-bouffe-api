@@ -52,6 +52,10 @@ components:
         id:
           example: A1S2D3
           type: string
+        displayId:
+          example: 41
+          description: The display id is not unique. It goes until 100 before restarting
+          type: integer
         firstname:
           type: string
           example: Alban
@@ -71,6 +75,9 @@ components:
         id:
           example: A1S2D3
           type: string
+        displayId:
+          example: 41
+          type: integer
         firstname:
           type: string
           example: Alban
