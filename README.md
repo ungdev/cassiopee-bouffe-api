@@ -41,6 +41,12 @@ Generate the prisma client (redo this command when you update schema.prisma)
 yarn prisma generate
 ```
 
+You can optionally fill the DB with random fake data with
+
+```
+yarn db:seed
+```
+
 ## Configuration
 
 Copy the file .env.example to .env and then edit it with your values :

@@ -81,6 +81,7 @@
     "openapi:check": "swagger-cli validate openapi.yml",
     "test": "mocha",
     "test:coverage": "nyc yarn test",
-    "db:push": "dotenv yarn prisma db push"
+    "db:push": "dotenv yarn prisma db push",
+    "db:seed": "ts-node tests/fakeSeed.ts"
   }
 }
