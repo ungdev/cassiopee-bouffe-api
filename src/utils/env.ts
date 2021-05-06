@@ -51,15 +51,6 @@ const env = {
     secret: loadEnv('JWT_SECRET') || notInProduction('LongRandomKey'),
     expires: loadEnv('NANOID_ALPHABET') || '1y',
   },
-
-  // Allow variable injection in testing environment for database credentials
-  database: {
-    host: loadEnv('DATABASE_HOST', true) || 'localhost',
-    port: loadIntEnv('DATABASE_PORT', true) || 3306,
-    username: loadEnv('DATABASE_USERNAME', true),
-    password: loadEnv('DATABASE_PASSWORD', true),
-    name: loadEnv('DATABASE_NAME', true) || 'bouffe',
-  },
   etupay: {
     id: loadIntEnv('ETUPAY_ID') || notInProduction(1),
     // random 256 bits key genereated if not in production

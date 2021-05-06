@@ -1,6 +1,6 @@
 FROM node:15-alpine
 
-ENV NODE_ENV=production
+ENV NODE_ENV production
 WORKDIR /opt
 
 RUN chown node:node .
@@ -16,5 +16,5 @@ COPY ./ ./
 RUN yarn prisma generate
 RUN yarn build
 
-# TODO: add yarn prisma create columns in CMD
-CMD yarn start
+
+CMD yarn db:push && yarn start

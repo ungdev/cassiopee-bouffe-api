@@ -32,7 +32,7 @@ CREATE DATABASE bouffe CHARACTER SET utf8;
 Create the tables
 
 ```
-DATABASE_URL="mysql://user:password@localhost/bouffe" yarn prisma db push --preview-feature
+yarn db:push
 ```
 
 Generate the prisma client (redo this command when you update schema.prisma)

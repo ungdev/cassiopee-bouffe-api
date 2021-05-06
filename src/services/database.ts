@@ -31,7 +31,6 @@ if (!env.production) {
 }
 
 const setup = async () => {
-  process.env.DATABASE_URL = `mysql://${env.database.username}:${env.database.password}@${env.database.host}:${env.database.port}/${env.database.name}`;
   await database.vendor.findMany();
 };
 setup().catch((error) => {
