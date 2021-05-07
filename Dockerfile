@@ -1,20 +1,19 @@
 FROM node:15-alpine
 
 ENV NODE_ENV production
-WORKDIR /opt
+WORKDIR /srv/app
 
-RUN chown node:node .
+RUN chown -R node:node /srv/app
+USER 1000
 
-USER node
+COPY --chown=node package.json yarn.lock schema.prisma ./
 
-COPY package.json yarn.lock schema.prisma ./
+RUN yarn --frozen-lockfile && yarn cache clean
 
-RUN yarn --frozen-lockfile
+COPY --chown=node ./ ./
 
-COPY ./ ./
 
 RUN yarn prisma generate
 RUN yarn build
 
-
-CMD yarn db:push && yarn start
+CMD yarn prisma db push && yarn start
