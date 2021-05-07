@@ -3,17 +3,12 @@ FROM node:15-alpine
 ENV NODE_ENV production
 WORKDIR /srv/app
 
-RUN chown -R node:node /srv/app
-USER 1000
+COPY . .
 
-COPY --chown=node package.json yarn.lock schema.prisma ./
-
-RUN yarn --frozen-lockfile && yarn cache clean
-
-COPY --chown=node ./ ./
-
-
-RUN yarn prisma generate
-RUN yarn build
+RUN mkdir /.yarn && chmod g+rwx -R /.yarn && \
+    mkdir -p /.cache/yarn && chmod -R g+rwx /.cache/yarn && \
+    yarn --frozen-lockfile && yarn cache clean && \
+    mkdir -p ./node_modules/.prisma/client && yarn prisma generate && yarn build && \
+    chgrp -R 0 /srv/app && chmod g+rwx -R /srv/app
 
 CMD yarn prisma db push && yarn start
