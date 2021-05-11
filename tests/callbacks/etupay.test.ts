@@ -1,3 +1,4 @@
+import { expect } from 'chai';
 import crypto from 'crypto';
 import request from 'supertest';
 import app from '../../src/app';
@@ -8,7 +9,7 @@ import { Error } from '../../src/types';
 import { createFakeItem, createFakeOrder, createFakeVendor } from '../utils';
 import env from '../../src/utils/env';
 import { encodeToBase64, randomInt } from '../../src/utils/helpers';
-import { Order } from '.prisma/client';
+import { Order, OrderStatus, TransactionState } from '.prisma/client';
 import nanoid from '../../src/utils/nanoid';
 
 const createEtupayPayload = (etupayBody: object) => {
@@ -52,8 +53,9 @@ describe('POST /callbacks/etupay', () => {
     request(app).post('/callbacks/etupay').expect(200, { api: 'ok' }));
 });
 
-describe('GET /callbacks/etupay', () => {
+describe.only('GET /callbacks/etupay', () => {
   let order: Order;
+  let failedOrder: Order;
   let paidPayload: string;
   let refusedPayload: string;
 
@@ -81,7 +83,7 @@ describe('GET /callbacks/etupay', () => {
     paidPayload = createEtupayPayload(etupayBody);
 
     // Create a refused payload
-    const failedOrder = await createFakeOrder({
+    failedOrder = await createFakeOrder({
       vendor,
       orderItems: [{ id: nanoid(), itemId: item.id, quantity: 1 }],
     });
@@ -132,22 +134,34 @@ describe('GET /callbacks/etupay', () => {
       .expect(500, { error: Error.InternalServerError });
   });
 
-  it('should redirect to the error URL as the payment was rejected', () =>
-    request(app)
+  it('should redirect to the error URL as the payment was rejected', async () => {
+    await request(app)
       .get(`/callbacks/etupay?payload=${refusedPayload}`)
       .expect(302)
-      .expect('Location', env.etupay.errorUrl));
+      .expect('Location', env.etupay.errorUrl);
+
+    const updatedOrder = await orderOperations.fetchOrder(failedOrder.id);
+
+    expect(updatedOrder.transactionState).to.be.equal(TransactionState.refused);
+    expect(updatedOrder.status).to.be.equal(OrderStatus.cancelled);
+  });
 
   it('should reject as the payment is already errored', () =>
     request(app)
       .get(`/callbacks/etupay?payload=${refusedPayload}`)
       .expect(403, { error: Error.AlreadyErrored }));
 
-  it('should successfully redirect to the success url', () =>
-    request(app)
+  it('should successfully redirect to the success url', async () => {
+    await request(app)
       .get(`/callbacks/etupay?payload=${paidPayload}`)
       .expect(302)
-      .expect('Location', env.etupay.successUrl));
+      .expect('Location', env.etupay.successUrl);
+
+    const updatedOrder = await orderOperations.fetchOrder(order.id);
+
+    expect(updatedOrder.transactionState).to.be.equal(TransactionState.paid);
+    expect(updatedOrder.status).to.be.equal(OrderStatus.pending);
+  });
 
   it('should fail as the order is already paid', () =>
     request(app)

@@ -1,4 +1,4 @@
-import { OrderStatus, Provider, TransactionState, Vendor, Prisma } from '@prisma/client';
+import { Provider, Vendor, Prisma } from '@prisma/client';
 import database from '../services/database';
 import { PrimitiveOrderItem } from '../types';
 import nanoid from '../utils/nanoid';
@@ -66,19 +66,4 @@ export const editOrder = (orderId: string, order: Prisma.OrderUpdateInput) =>
     where: {
       id: orderId,
     },
-  });
-
-export const updateOrderFromEtupay = (order: {
-  id: string;
-  transactionState: TransactionState;
-  transactionId: number;
-}) =>
-  database.order.update({
-    data: {
-      // Do not use object spreading. The validation by prisma is less efficient
-      transactionState: order.transactionState,
-      transactionId: order.transactionId,
-      status: OrderStatus.pending,
-    },
-    where: { id: order.id },
   });

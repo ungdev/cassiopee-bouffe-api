@@ -1,6 +1,6 @@
-import { TransactionState } from '@prisma/client';
+import { OrderStatus, TransactionState } from '@prisma/client';
 import { NextFunction, Request, Response } from 'express';
-import { fetchOrder, updateOrderFromEtupay } from '../../operations/order';
+import { fetchOrder, editOrder } from '../../operations/order';
 import * as etupay from '../../services/etupay';
 import { Error, EtupayError, EtupayResponse } from '../../types';
 import env from '../../utils/env';
@@ -45,17 +45,23 @@ export const clientCallback = [
         return forbidden(response, Error.AlreadyErrored);
       }
 
-      // Update the order with the callback data
-      await updateOrderFromEtupay({
-        id: order.id,
-        transactionState: etupayResponse.step,
-        transactionId: etupayResponse.transactionId,
-      });
-
       // If the transaction state wasn't paid, redirect to the error url
       if (!etupayResponse.paid) {
+        // Update the order with the callback data
+        await editOrder(order.id, {
+          transactionState: etupayResponse.step,
+          transactionId: etupayResponse.transactionId,
+          status: OrderStatus.cancelled,
+        });
+
         return response.redirect(env.etupay.errorUrl);
       }
+
+      await editOrder(order.id, {
+        transactionState: etupayResponse.step,
+        transactionId: etupayResponse.transactionId,
+        status: OrderStatus.pending,
+      });
 
       return response.redirect(env.etupay.successUrl);
     } catch (error) {
