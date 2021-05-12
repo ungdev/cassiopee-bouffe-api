@@ -57,6 +57,7 @@ describe('GET /vendors/:vendorId/orders', () => {
       id: order.id,
       displayId: order.displayId,
       firstname: order.firstname,
+      lastnameTrimmed: order.lastname.charAt(0).toUpperCase(),
       status: 'pending',
     };
 

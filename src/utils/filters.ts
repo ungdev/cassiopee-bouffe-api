@@ -38,5 +38,11 @@ export const filterOrder = (order: Order) => {
   };
 };
 
-export const filterOrderRestricted = (order: Order) =>
-  pick(order, ['id', 'displayId', 'firstname', 'status']);
+export const filterOrderRestricted = (order: Order) => {
+  const restrictedOrder = pick(order, ['id', 'displayId', 'firstname', 'status']);
+
+  return {
+    ...restrictedOrder,
+    lastnameTrimmed: order.lastname.charAt(0).toUpperCase(),
+  };
+};

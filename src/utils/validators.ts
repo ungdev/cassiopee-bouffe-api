@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import { Provider } from '.prisma/client';
 
-const nameRegex = /^[\p{L} _'-]{3,100}/u;
+const nameRegex = /^[\p{L} _'-]{2,100}/u;
 const pinRegex = /^\d{6}$/;
 
 // General

@@ -53,7 +53,7 @@ describe('POST /callbacks/etupay', () => {
     request(app).post('/callbacks/etupay').expect(200, { api: 'ok' }));
 });
 
-describe.only('GET /callbacks/etupay', () => {
+describe('GET /callbacks/etupay', () => {
   let order: Order;
   let failedOrder: Order;
   let paidPayload: string;

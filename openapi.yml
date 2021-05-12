@@ -81,6 +81,9 @@ components:
         firstname:
           type: string
           example: Alban
+        lastnameTrimmed:
+          type: string
+          example: F
         status:
           $ref: '#/components/schemas/OrderStatus'
 
