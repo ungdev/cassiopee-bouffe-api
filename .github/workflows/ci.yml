@@ -19,7 +19,7 @@ jobs:
       - run: yarn prisma generate
       - run: yarn lint
       - uses: lazy-actions/slatify@master
-        if: always()
+        if: failure()
         with:
           type: ${{ job.status }}
           job_name: '*Job ${{ github.job }}*'
@@ -39,7 +39,7 @@ jobs:
       - run: yarn prisma generate
       - run: yarn build
       - uses: lazy-actions/slatify@master
-        if: always()
+        if: failure()
         with:
           type: ${{ job.status }}
           job_name: '*Job ${{ github.job }}*'
@@ -76,7 +76,7 @@ jobs:
       - run: yarn test:coverage
       - uses: codecov/codecov-action@v1
       - uses: lazy-actions/slatify@master
-        if: always()
+        if: failure()
         with:
           type: ${{ job.status }}
           job_name: '*Job ${{ github.job }}*'
