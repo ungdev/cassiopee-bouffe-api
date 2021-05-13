@@ -18,6 +18,14 @@ jobs:
       - run: yarn openapi:check
       - run: yarn prisma generate
       - run: yarn lint
+      - uses: lazy-actions/slatify@master
+        if: always()
+        with:
+          type: ${{ job.status }}
+          job_name: '*Job ${{ job.name }} failed*'
+          commit: true
+          url: ${{ secrets.SLACK_WEBHOOK_URL }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
   build:
     runs-on: ubuntu-latest
@@ -30,6 +38,14 @@ jobs:
       - run: yarn --frozen-lockfile
       - run: yarn prisma generate
       - run: yarn build
+      - uses: lazy-actions/slatify@master
+        if: always()
+        with:
+          type: ${{ job.status }}
+          job_name: '*Job ${{ job.name }} failed*'
+          commit: true
+          url: ${{ secrets.SLACK_WEBHOOK_URL }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
   test:
     runs-on: ubuntu-latest
@@ -59,6 +75,22 @@ jobs:
       - run: yarn prisma db push
       - run: yarn test:coverage
       - uses: codecov/codecov-action@v1
+      - uses: lazy-actions/slatify@master
+        if: always()
+        with:
+          type: ${{ job.status }}
+          job_name: '*Deployment to ${{ env.RESOURCE_NAME }}*'
+          commit: true
+          url: ${{ secrets.SLACK_WEBHOOK_URL }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: lazy-actions/slatify@master
+        if: always()
+        with:
+          type: ${{ job.status }}
+          job_name: '*Job ${{ job.name }} failed*'
+          commit: true
+          url: ${{ secrets.SLACK_WEBHOOK_URL }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
   deploy:
     if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev'
