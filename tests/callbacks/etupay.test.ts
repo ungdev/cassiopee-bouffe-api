@@ -1,5 +1,6 @@
 import { expect } from 'chai';
 import crypto from 'crypto';
+import fs from 'fs/promises';
 import request from 'supertest';
 import app from '../../src/app';
 import { sandbox } from '../setup';
@@ -53,7 +54,7 @@ describe('POST /callbacks/etupay', () => {
     request(app).post('/callbacks/etupay').expect(200, { api: 'ok' }));
 });
 
-describe('GET /callbacks/etupay', () => {
+describe.only('GET /callbacks/etupay', () => {
   let order: Order;
   let failedOrder: Order;
   let paidPayload: string;
@@ -135,15 +136,19 @@ describe('GET /callbacks/etupay', () => {
   });
 
   it('should redirect to the error URL as the payment was rejected', async () => {
-    await request(app)
+    const response = await request(app)
       .get(`/callbacks/etupay?payload=${refusedPayload}`)
-      .expect(302)
-      .expect('Location', env.etupay.errorUrl);
+      .expect(200)
+      .expect('Content-Type', 'text/html; charset=utf-8');
+
+    // Save the file to the artificats to inspect it
+    await fs.writeFile('artifacts/errorPayment.html', response.text);
 
     const updatedOrder = await orderOperations.fetchOrder(failedOrder.id);
 
     expect(updatedOrder.transactionState).to.be.equal(TransactionState.refused);
     expect(updatedOrder.status).to.be.equal(OrderStatus.cancelled);
+    expect(response.text).to.contain('Une erreur est survenue');
   });
 
   it('should reject as the payment is already errored', () =>
@@ -152,15 +157,19 @@ describe('GET /callbacks/etupay', () => {
       .expect(403, { error: Error.AlreadyErrored }));
 
   it('should successfully redirect to the success url', async () => {
-    await request(app)
+    const response = await request(app)
       .get(`/callbacks/etupay?payload=${paidPayload}`)
-      .expect(302)
-      .expect('Location', env.etupay.successUrl);
+      .expect(200)
+      .expect('Content-Type', 'text/html; charset=utf-8');
+
+    // Save the file to the artificats to inspect it
+    await fs.writeFile('artifacts/successfulPayment.html', response.text);
 
     const updatedOrder = await orderOperations.fetchOrder(order.id);
 
     expect(updatedOrder.transactionState).to.be.equal(TransactionState.paid);
     expect(updatedOrder.status).to.be.equal(OrderStatus.pending);
+    expect(response.text).to.contain('Merci !');
   });
 
   it('should fail as the order is already paid', () =>

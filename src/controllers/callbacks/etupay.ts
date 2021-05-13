@@ -3,7 +3,6 @@ import { NextFunction, Request, Response } from 'express';
 import { fetchOrder, editOrder } from '../../operations/order';
 import * as etupay from '../../services/etupay';
 import { Error, EtupayError, EtupayResponse } from '../../types';
-import env from '../../utils/env';
 import { decodeFromBase64 } from '../../utils/helpers';
 import { badRequest, forbidden, notFound, success } from '../../utils/responses';
 
@@ -54,7 +53,9 @@ export const clientCallback = [
           status: OrderStatus.cancelled,
         });
 
-        return response.redirect(env.etupay.errorUrl);
+        return response.render('paymentCallback', {
+          order: { displayId: order.displayId, successful: false },
+        });
       }
 
       await editOrder(order.id, {
@@ -63,7 +64,9 @@ export const clientCallback = [
         status: OrderStatus.pending,
       });
 
-      return response.redirect(env.etupay.successUrl);
+      return response.render('paymentCallback', {
+        order: { displayId: order.displayId, successful: true },
+      });
     } catch (error) {
       return next(error);
     }

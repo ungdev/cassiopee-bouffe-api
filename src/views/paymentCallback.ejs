@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Paiement</title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"
+      integrity="sha512-NhSC1YmyruXifcj/KFRWoC561YpHpc5Jtzgvbuzx5VozKpWvQ+4nXhPdFgmx8xqexRcpAglTj9sIBWINXa8x5w=="
+      crossorigin="anonymous"
+    />
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+      integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ"
+      crossorigin="anonymous"
+    />
+
+    <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        font-family: 'Roboto';
+        font-size: 22pt;
+      }
+      body {
+        background: radial-gradient(at top right, #43b9d5 0, #22749c 100%);
+      }
+
+      .main-text {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        margin: auto;
+        width: calc(100% - 50px);
+        height: 100%;
+      }
+
+      .main-text > div {
+        width: 100%;
+        background-color: rgba(198, 233, 250, 0.6);
+        padding-top: 30px;
+        padding-bottom: 30px;
+      }
+
+      .main-text > div > div {
+        margin-top: 20px;
+        margin-bottom: 20px;
+      }
+
+      .title-decoration {
+        text-transform: uppercase;
+        font-size: 54pt;
+        color: #22749c;
+      }
+
+      .close {
+        position: absolute;
+        color: white;
+        left: 3%;
+        transition: all 0.3s;
+        animation: arrow-icon-animation 2s infinite;
+        opacity: 1;
+      }
+
+      @keyframes arrow-icon-animation {
+        0% {
+          top: 60px;
+          opacity: 0;
+        }
+
+        20% {
+          opacity: 1;
+        }
+
+        60% {
+          top: 30px;
+          opacity: 1;
+        }
+
+        100% {
+          top: 5px;
+          opacity: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <% if(order.successful) { %>
+    <div class="main-text">
+      <div>
+        <div class="title-decoration">Merci !</div>
+        <div>Votre commande porte le numéro</div>
+        <div class="title-decoration"><%= order.displayId %></div>
+        <div>Vous pouvez fermer la fenêtre</div>
+      </div>
+    </div>
+    <% } else { %>
+    <div class="main-text">
+      <div>
+        <div class="title-decoration">OOPS !</div>
+        <div>Une erreur est survenue</div>
+      </div>
+    </div>
+    <% } %>
+
+    <i class="fas fa-chevron-up close" />
+  </body>
+</html>

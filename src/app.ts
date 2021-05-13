@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import * as Sentry from '@sentry/node';
 import cors from 'cors';
 import helmet from 'helmet';
+import path from 'path';
 
 import { notFound } from './utils/responses';
 import { Error } from './types';
@@ -13,6 +14,9 @@ import env from './utils/env';
 import errorHandler from './middlewares/errorHandler';
 
 const app = express();
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
 // Initiate Sentry
 Sentry.init({ dsn: env.log.sentryDsn, environment: env.environment });
