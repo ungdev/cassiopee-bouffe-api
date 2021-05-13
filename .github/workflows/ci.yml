@@ -97,3 +97,4 @@ jobs:
           job_name: '*Deployment to ${{ env.RESOURCE_NAME }}*'
           commit: true
           url: ${{ secrets.SLACK_WEBHOOK_URL }}
+          token: ${{ secrets.GITHUB_TOKEN }}
