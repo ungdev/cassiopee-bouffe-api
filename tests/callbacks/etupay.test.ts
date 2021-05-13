@@ -70,7 +70,7 @@ describe('GET /callbacks/etupay', () => {
     // This is the data format how it is encrypted in the payload
     const etupayBody = {
       // Create a random transaction id
-      transaction_id: randomInt(10000, 99999),
+      transaction_id: randomInt(10_000, 99_999),
       type: 'checkout',
       // We bought a ticket for a player, so 15€ (the price doesn't matter now),
       amount: 1500,
