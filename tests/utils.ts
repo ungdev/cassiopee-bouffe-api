@@ -30,16 +30,18 @@ export const createFakeVendor = ({
 
 export const createFakeItem = async ({
   name = faker.commerce.productName(),
+  description = Math.random() > 0.75 ? faker.commerce.productDescription() : '', // Handle the case where the description doesn't exists
   price = faker.datatype.number({ min: 100, max: 1000 }),
   available = true,
   vendor,
 }: {
   name?: string;
+  description?: string;
   price?: number;
   available?: boolean;
   vendor: Vendor;
 }): Promise<Item> => {
-  const item = await createItem(name, price, vendor);
+  const item = await createItem(name, description, price, vendor);
 
   // Update the item avai
   if (!available) {

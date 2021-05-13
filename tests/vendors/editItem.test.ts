@@ -73,6 +73,7 @@ describe('PATCH /vendors/me/items/:itemId', () => {
     const testingResult = {
       id: item.id,
       name: item.name,
+      description: item.description,
       price: item.price,
       available: false,
     };

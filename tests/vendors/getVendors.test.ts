@@ -38,6 +38,7 @@ describe('GET /vendors', () => {
         {
           id: vendors[0].items[0].id,
           name: vendors[0].items[0].name,
+          description: vendors[0].items[0].description,
           available: vendors[0].items[0].available,
           price: vendors[0].items[0].price,
         },

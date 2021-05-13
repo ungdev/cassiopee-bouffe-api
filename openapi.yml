@@ -96,6 +96,9 @@ components:
         name:
           example: Giga Quick
           type: string
+        description:
+          example: Bacon, Tomates, Jambon
+          type: string
         price:
           example: 1000
           type: integer

@@ -29,6 +29,7 @@ model Order {
 model Item {
   id              String           @id
   name            String
+  description     String?
   price           Int
   available       Boolean          @default(true)
   vendorId        String

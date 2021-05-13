@@ -103,6 +103,7 @@ describe('PATCH /vendors/me/orders/:orderId', () => {
           item: {
             id: order.orderItems[0].item.id,
             name: order.orderItems[0].item.name,
+            description: order.orderItems[0].item.description,
             price: order.orderItems[0].item.price,
             available: order.orderItems[0].item.available,
           },

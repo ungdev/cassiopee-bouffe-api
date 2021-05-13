@@ -10,11 +10,12 @@ export const fetchItem = async (parameterId: string, key = 'id') => {
   return item;
 };
 
-export const createItem = (name: string, price: number, vendor: Vendor) =>
+export const createItem = (name: string, description: string, price: number, vendor: Vendor) =>
   database.item.create({
     data: {
       id: nanoid(),
       name,
+      description,
       price,
       vendor: { connect: { id: vendor.id } },
     },
