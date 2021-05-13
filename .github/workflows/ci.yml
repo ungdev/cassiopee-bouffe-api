@@ -22,7 +22,7 @@ jobs:
         if: always()
         with:
           type: ${{ job.status }}
-          job_name: '*Job ${{ job.name }} failed*'
+          job_name: '*Job ${{ github.job }}*'
           commit: true
           url: ${{ secrets.SLACK_WEBHOOK_URL }}
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -42,7 +42,7 @@ jobs:
         if: always()
         with:
           type: ${{ job.status }}
-          job_name: '*Job ${{ job.name }} failed*'
+          job_name: '*Job ${{ github.job }}*'
           commit: true
           url: ${{ secrets.SLACK_WEBHOOK_URL }}
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -79,15 +79,7 @@ jobs:
         if: always()
         with:
           type: ${{ job.status }}
-          job_name: '*Deployment to ${{ env.RESOURCE_NAME }}*'
-          commit: true
-          url: ${{ secrets.SLACK_WEBHOOK_URL }}
-          token: ${{ secrets.GITHUB_TOKEN }}
-      - uses: lazy-actions/slatify@master
-        if: always()
-        with:
-          type: ${{ job.status }}
-          job_name: '*Job ${{ job.name }} failed*'
+          job_name: '*Job ${{ github.job }}*'
           commit: true
           url: ${{ secrets.SLACK_WEBHOOK_URL }}
           token: ${{ secrets.GITHUB_TOKEN }}
