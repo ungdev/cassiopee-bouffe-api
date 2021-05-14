@@ -16,7 +16,7 @@ import errorHandler from './middlewares/errorHandler';
 const app = express();
 
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, '../assets/views'));
 
 // Initiate Sentry
 Sentry.init({ dsn: env.log.sentryDsn, environment: env.environment });
