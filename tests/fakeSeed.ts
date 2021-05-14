@@ -3,14 +3,21 @@ import logger from '../src/utils/logger';
 import { randomInt } from '../src/utils/helpers';
 import { createFakeItem, createFakeOrder, createFakeVendor } from './utils';
 import nanoid from '../src/utils/nanoid';
-import { Item } from '.prisma/client';
+import { Item, OrderStatus } from '.prisma/client';
 import { PrimitiveOrderItem } from '../src/types';
 import database from '../src/services/database';
+import { editOrder } from '../src/operations/order';
 
 // Just a script to populate the DB with fake data
 (async () => {
+  await database.orderItem.deleteMany();
+  await database.order.deleteMany();
+  await database.item.deleteMany();
+  await database.vendor.deleteMany();
+
   for (let vendorIndex = 0; vendorIndex < 2; vendorIndex += 1) {
-    const vendor = await createFakeVendor();
+    // Create a vendor with a fixed pin
+    const vendor = await createFakeVendor({ pin: (111_111 * (vendorIndex + 1)).toString() });
     logger.info(`Vendor ${vendor.name} (${vendor.id}) created`);
 
     const items: Item[] = [];
@@ -29,6 +36,9 @@ import database from '../src/services/database';
       }
 
       const order = await createFakeOrder({ vendor, orderItems });
+
+      await editOrder(order.id, { status: sample<OrderStatus>(OrderStatus) });
+
       logger.info(`Order #${order.displayId} (${order.id}) created`);
     }
   }
