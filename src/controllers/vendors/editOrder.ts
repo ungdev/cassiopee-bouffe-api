@@ -23,7 +23,7 @@ const allowedDirections = [
   [OrderStatus.ready, OrderStatus.preparing],
 
   // ready → finished
-  [OrderStatus.preparing, OrderStatus.ready],
+  [OrderStatus.ready, OrderStatus.finished],
 
   // [pending, preparing, ready] → cancelled
   [OrderStatus.pending, OrderStatus.cancelled],
