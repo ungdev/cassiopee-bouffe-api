@@ -96,6 +96,7 @@ describe('PATCH /vendors/me/orders/:orderId', () => {
       firstname: order.firstname,
       lastname: order.lastname,
       status: 'preparing',
+      createdAt: order.createdAt.toJSON(),
       orderItems: [
         {
           id: order.orderItems[0].id,

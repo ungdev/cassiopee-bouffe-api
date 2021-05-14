@@ -60,6 +60,7 @@ describe('GET /vendors/:vendorId/orders', () => {
       firstname: order.firstname,
       lastname: order.lastname,
       status: 'pending',
+      createdAt: order.createdAt.toJSON(),
       orderItems: [
         {
           id: order.orderItems[0].id,

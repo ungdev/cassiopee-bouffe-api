@@ -64,6 +64,9 @@ components:
           example: Lachô
         status:
           $ref: '#/components/schemas/OrderStatus'
+        createdAt:
+          type: string
+          format: date-time
         orderItems:
           type: array
           items:
