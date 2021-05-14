@@ -46,7 +46,7 @@ describe('GET /vendors/:vendorId/orders', () => {
     expect(response.body).to.have.lengthOf(0);
   });
 
-  it.only('should return 200 with an array of vendors', async () => {
+  it('should return 200 with an array of vendors', async () => {
     const [order] = await orderOperations.fetchOrders(vendor.id);
     await database.order.update({ data: { status: OrderStatus.pending }, where: { id: order.id } });
     const response = await request(app).get(`/vendors/${vendor.id}/orders`).expect(200);

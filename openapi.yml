@@ -252,6 +252,20 @@ paths:
                     type: integer
                     description: Prix du panier en centimes
 
+  /vendors/me:
+    get:
+      summary: Récupère ses informations de vendeur
+      description: Récupère ses informations de vendeur
+      tags:
+        - Vendors
+      responses:
+        200:
+          description: Les informations sont renvoyées
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vendor'
+
   /vendors/me/orders:
     get:
       summary: Affiche les commandes en cours

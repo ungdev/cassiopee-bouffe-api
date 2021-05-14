@@ -5,6 +5,7 @@ import editOrder from './editOrder';
 import getOrders from './getOrders';
 import getRestrictedOrders from './getRestrictedOrders';
 import getVendors from './getVendors';
+import getVendor from './getVendor';
 import login from './login';
 
 const router = Router();
@@ -14,6 +15,7 @@ router.post('/login', login);
 router.get('/me/orders', getOrders);
 router.patch('/me/orders/:orderId', editOrder);
 router.patch('/me/items/:itemId', editItem);
+router.get('/me', getVendor);
 router.get('/:vendorId/orders', getRestrictedOrders);
 router.post('/:vendorId/orders', createOrder);
 

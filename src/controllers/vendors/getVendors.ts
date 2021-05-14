@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { fetchVendors } from '../../operations/vendor';
 import { success } from '../../utils/responses';
-import { filterVendorRestricted } from '../../utils/filters';
+import { filterVendor } from '../../utils/filters';
 
 export default [
   // Controller
@@ -9,7 +9,7 @@ export default [
     try {
       const vendors = await fetchVendors();
 
-      return success(response, vendors.map(filterVendorRestricted));
+      return success(response, vendors.map(filterVendor));
     } catch (error) {
       return next(error);
     }

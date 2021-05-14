@@ -5,9 +5,7 @@ import { Vendor, Order } from '../types';
 export const filterItem = (item: Item) =>
   pick(item, ['id', 'name', 'description', 'price', 'available']);
 
-export const filterVendor = (vendor: Vendor) => pick(vendor, ['id', 'name', 'items']);
-
-export const filterVendorRestricted = (vendor: Vendor) => {
+export const filterVendor = (vendor: Vendor) => {
   const restrictedVendor = pick(vendor, ['id', 'name']);
 
   const restrictedItems = vendor.items.map(filterItem);
